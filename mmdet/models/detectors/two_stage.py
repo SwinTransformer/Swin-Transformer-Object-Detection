@@ -2,8 +2,9 @@ import torch
 import torch.nn as nn
 
 # from mmdet.core import bbox2result, bbox2roi, build_assigner, build_sampler
-from ..builder import DETECTORS, build_backbone, build_head, build_neck
 from .base import BaseDetector
+from ..builder import DETECTORS, build_backbone, build_head, build_neck
+import time
 
 
 @DETECTORS.register_module()
@@ -80,8 +81,12 @@ class TwoStageDetector(BaseDetector):
     def extract_feat(self, img):
         """Directly extract features from the backbone+neck."""
         x = self.backbone(img)
+        is_l_aux=x[-1]
         if self.with_neck:
-            x = self.neck(x)
+            if(type(is_l_aux)==float or len(is_l_aux.shape)<4):
+                x = self.neck(x[0])
+            else :
+                x= self.neck(x)
         return x
 
     def forward_dummy(self, img):
@@ -144,6 +149,7 @@ class TwoStageDetector(BaseDetector):
         losses = dict()
 
         # RPN forward and loss
+        
         if self.with_rpn:
             proposal_cfg = self.train_cfg.get('rpn_proposal',
                                               self.test_cfg.rpn)
@@ -161,9 +167,9 @@ class TwoStageDetector(BaseDetector):
         roi_losses = self.roi_head.forward_train(x, img_metas, proposal_list,
                                                  gt_bboxes, gt_labels,
                                                  gt_bboxes_ignore, gt_masks,
-                                                 **kwargs)
-        losses.update(roi_losses)
+                                        **kwargs)
 
+        losses.update(roi_losses)
         return losses
 
     async def async_simple_test(self,
