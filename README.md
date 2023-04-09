@@ -133,9 +133,43 @@ optimizer_config = dict(
 
 > **Image Classification**: See [Swin Transformer for Image Classification](https://github.com/microsoft/Swin-Transformer).
 
-> **Semantic Segmentation**: See [Swin Transformer for Semantic Segmentation](https://github.com/SwinTransformer/Swin-Transformer-Semantic-Segmentation).
+> **Semantic Segmentation**: See [Swin Transformer for Semantic Segmentation](https://github.com/Transformer/Swin-Transformer-Semantic-Segmentation).
 
 > **Self-Supervised Learning**: See [MoBY with Swin Transformer](https://github.com/SwinTransformer/Transformer-SSL).
 
 > **Video Recognition**, See [Video Swin Transformer](https://github.com/SwinTransformer/Video-Swin-Transformer).
 
+## swin-T moe 
+
+I added Swin Transformer MoE (referred to as Swin-T MoE hereafter) to the backbone network. MoE is a method that expands the model parameters and improves the model performance. The implementation of Swin Transformer MoE used Microsoft's Tutel framework.
+
+### Install [Tutel](https://github.com/microsoft/tutel)
+
+```
+python3 -m pip uninstall tutel -y 
+python3 -m pip install --user --upgrade git+https://github.com/microsoft/tutel@main
+```
+
+You can check out Swin-T MoE at .
+
+```
+.\mmdet\models\backbones\swin_transformer_moe.py.
+```
+
+I provided the relevant configuration files for reference:
+
+contains the parameters for the Swin-T MoE backbone network:
+
+```
+.\configs\swin\cascade_mask_rcnn_swin_moe_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco.py
+```
+
+contains the modified configuration for the backbone network:
+
+```
+.\configs\swin\cascade_mask_rcnn_swin_moe_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco.py
+```
+
+As the output of Swin-T MoE is different from Swin-T, I modified the `extract_feat` function in `.\mmdet\models\detectors\two_stage.py`.
+
+You can change the config according to your needs.

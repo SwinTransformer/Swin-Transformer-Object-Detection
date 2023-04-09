@@ -11,9 +11,9 @@ from .resnext import ResNeXt
 from .ssd_vgg import SSDVGG
 from .trident_resnet import TridentResNet
 from .swin_transformer import SwinTransformer
-
+from .swin_transformer_moe import SwinTransformerMoE
 __all__ = [
     'RegNet', 'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet', 'Res2Net',
     'HourglassNet', 'DetectoRS_ResNet', 'DetectoRS_ResNeXt', 'Darknet',
-    'ResNeSt', 'TridentResNet', 'SwinTransformer'
+    'ResNeSt', 'TridentResNet', 'SwinTransformer','SwinTransformerMoE'
 ]
